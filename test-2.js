@@ -152,15 +152,21 @@ Input 1: 3
 Output 1: *\n* *\n* * *
 Input 2: 2
 Output 2: *\n* *
+*/
 
 let printPattern = (rows) => {
-  for (let i = 0; i <= rows; i++) {
-    console.log("*");
+  for (let i = 1; i <= rows; i++) {
+    let line = "";
+    for (let j = 1; j <= i; j++) {
+      line += "*";
+    }
+
+    console.log(line.trim());
   }
 };
 
-console.log(printPattern(2));
-*/
+printPattern(3);
+printPattern(2);
 
 /*
 8. Factorial using recursion
@@ -259,18 +265,20 @@ Output 1: {1:'a', 2:'b'}
 Input 2: {x:'y', z:'w'}
 Output 2: {'y':'x', 'w':'z'}
 */
+let swapKeyAndValue = (obj) => {
+  let swapped = {};
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      let value = obj[key];
+      swapped[value] = key;
+    }
+  }
 
-// let invertObject = (obj) => {
-//     for(key in ) {}
-// };
-obj = { a: 1, b: 2 };
-for (key in obj) {
-  let temp = key;
-  key = obj[key];
-  obj[key] = temp;
-}
-console.log(obj);
+  return swapped;
+};
 
+console.log(swapKeyAndValue({ a: 1, b: 2 }));
+console.log(swapKeyAndValue({ x: "y", z: "w" }));
 /*
 13. Merge two objects
 Combine two objects into one.
@@ -297,6 +305,25 @@ Input 2: {x: 100, y: 99}
 Output 2: "x"
 */
 
+let findKey = (obj) => {
+  let highestKey;
+  let highestValue = 0;
+
+  for (key in obj) {
+    if (obj[key] > highestValue) {
+      highestValue = obj[key];
+      highestKey = key;
+    }
+  }
+
+  return highestKey;
+};
+
+let highestKey = findKey({ a: 1, b: 5, c: 3 });
+let highestKey2 = findKey({ x: 100, y: 99 });
+console.log("HighestKey: ", highestKey);
+console.log("HighestKey: ", highestKey2);
+
 /*
 15. Deep clone an object
 Create a deep copy of an object manually (no JSON.parse).
@@ -305,6 +332,36 @@ Output 1: {a: 1, b: {c: 2}}
 Input 2: {x: [1, 2], y: {z: 3}}
 Output 2: {x: [1, 2], y: {z: 3}}
 */
+
+let input1 = { a: 1, b: { c: 2 } };
+let input2 = { x: [1, 2], y: { z: 3 } };
+
+let deepClone = (obj) => {
+  if (typeof obj !== "object" || obj === null) return obj;
+
+  if (Array.isArray(obj)) {
+    let copyArr = [];
+    for (let i = 0; i < obj.length; i++) {
+      copyArr[i] = deepClone(obj[i]);
+    }
+
+    return copyArr;
+  }
+
+  let copyObj = {};
+  for (let key in obj) {
+    // (hasOwnProperty) avoids copying inherited properties that don't actually belong to the object itself.
+    if (obj.hasOwnProperty(key)) {
+      copyObj[key] = deepClone(obj[key]);
+    }
+  }
+  return copyObj;
+};
+
+let copyInput1 = deepClone(input1);
+console.log(copyInput1);
+let copyInput2 = deepClone(input2);
+console.log(copyInput2);
 
 /*
 16. Check if string is palindrome
@@ -339,19 +396,27 @@ Input 1: "aabbcdd"
 Output 1: "c"
 Input 2: "xxyz"
 Output 2: "y"
-let nonRepeating = (string) => {
+*/
+
+let isRepeated = (string) => {
+  let frequency = {};
+
   for (let i = 0; i < string.length; i++) {
-    for (let j = i + 1; string.length; j++) {
-      if (string[i] == string[j]) {
-        continue;
-      } else if (string[i] != string[j]) {
-        return string[i];
-      }
+    let char = string[i];
+    frequency[char] = (frequency[char] || 0) + 1;
+  }
+
+  for (let i = 0; i < string.length; i++) {
+    if (frequency[string[i]] === 1) {
+      return string[i];
     }
   }
+
+  return null;
 };
-console.log(nonRepeating("aabbcdd"));
-*/
+
+console.log(isRepeated("aabbcdd"));
+console.log(isRepeated("xxyz"));
 
 /*
 18. Reverse a string manually
@@ -393,3 +458,32 @@ Output 1: {fruit: ['apple', 'banana']}
 Input 2: [{type:'a',name:'x'},{type:'b',name:'z'}]
 Output 2: {a:['x'], b:['z']}
 */
+
+let groupObj = (arrayOfObj) => {
+  let combinedObj = {};
+  for (let i = 0; i < arrayOfObj.length; i++) {
+    let obj = arrayOfObj[i];
+
+    if (!combinedObj[obj.type]) {
+      combinedObj[obj.type] = [];
+    }
+
+    combinedObj[obj.type].push(obj.name);
+  }
+
+  return combinedObj;
+};
+
+console.log(
+  groupObj([
+    { type: "fruit", name: "apple" },
+    { type: "fruit", name: "banana" },
+  ])
+);
+
+console.log(
+  groupObj([
+    { type: "a", name: "x" },
+    { type: "b", name: "z" },
+  ])
+);
