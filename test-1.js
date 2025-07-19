@@ -292,6 +292,24 @@ Output 1: { number: 1, string: 1, boolean: 1, object: 1 }
 Input 2: ['x', 'y', 5]
 Output 2: { string: 2, number: 1 }
 */
+let countDataTypes = (array) => {
+  let countObj = {};
+
+  for (let i = 0; i < array.length; i++) {
+    let type = typeof array[i];
+
+    if (typeof array[i] === null) {
+      type = "null";
+    }
+
+    countObj[type] = (countObj[type] || 0) + 1;
+  }
+
+  return countObj;
+};
+
+console.log(countDataTypes([1, "hi", true, {}]));
+console.log(countDataTypes(["x", "y", 5]));
 
 /*
 18. Flatten One-Level Nested Array
